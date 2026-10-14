@@ -52,4 +52,4 @@ body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.5 system-ui,-
 footer{background:var(--navy);color:var(--gold-l);text-align:center;padding:18px 0;margin-top:30px;font-size:14px}
 @media(min-width:700px){.info{display:grid;grid-template-columns:1fr 1fr;gap:16px}.info .note{grid-column:1/-1}}
 .hero-logo{display:none}
-@media(min-width:900px){.hero .wrap{position:relative}.hero-logo{display:block;position:absolute;right:16px;top:-6px;width:210px;height:210px;border-radius:50%;box-shadow:0 0 0 3px var(--gold-l),0 12px 30px rgba(0,0,0,.35)}.hero h1,.hero p{max-width:560px}}
+@media(min-width:900px){.hero .wrap{position:relative}.hero-logo{display:block;position:absolute;right:16px;top:-14px;width:170px;height:170px;border-radius:50%;box-shadow:0 0 0 3px var(--gold-l),0 12px 30px rgba(0,0,0,.35)}.hero h1,.hero p{max-width:560px}}
