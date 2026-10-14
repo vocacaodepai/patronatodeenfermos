@@ -4,6 +4,7 @@
   const norm = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]/g, " ");
   const UFS = { AC: "Acre", AL: "Alagoas", AP: "Amapá", AM: "Amazonas", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MT: "Mato Grosso", MS: "Mato Grosso do Sul", MG: "Minas Gerais", PA: "Pará", PB: "Paraíba", PR: "Paraná", PE: "Pernambuco", PI: "Piauí", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RS: "Rio Grande do Sul", RO: "Rondônia", RR: "Roraima", SC: "Santa Catarina", SP: "São Paulo", SE: "Sergipe", TO: "Tocantins" };
   const PAGE = 30;
+  const TIPO = { "Hospital": 0, "Hospital especializado": 1, "Unidade mista": 2 };
   const state = { uf: "", city: "", bairro: "", tipo: "", q: "", shown: PAGE, data: null, near: null };
   const cache = {};
 
@@ -52,7 +53,7 @@
     const words = norm(state.q).split(/\s+/).filter(Boolean);
     return state.data.h.map(hosp).filter(h => h.cidade === state.city && (!state.bairro || h.bairro === state.bairro) &&
       (!state.tipo || (state.tipo === "Clínica" ? h.tipo === "Clínica" : h.tipo !== "Clínica")) &&
-      words.every(w => norm(h.nome + " " + h.bairro).includes(w))).sort((a, b) => a.nome.localeCompare(b.nome, "pt"));
+      words.every(w => norm(h.nome + " " + h.bairro).includes(w))).sort((a, b) => (TIPO[a.tipo] ?? 3) - (TIPO[b.tipo] ?? 3) || a.nome.localeCompare(b.nome, "pt"));
   }
 
   function renderList() {
