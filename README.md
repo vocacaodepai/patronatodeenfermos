@@ -1,4 +1,4 @@
-# Patronato de Enfermos
+# Patronato dos Enfermos
 
 Site/app responsivo (PWA instalável) que indica a paróquia mais próxima de cada hospital ou clínica
 (Rio, Niterói, São Gonçalo e Baixada) para pedir a Unção dos Enfermos.
@@ -13,4 +13,4 @@ Sem build. Basta servir a pasta: `npx http-server .` e abrir no navegador (no ce
 - Tempo estimado = distância em linha reta × 1,35 a 25 km/h (apenas estimativa).
 
 ## Marca (`assets/`)
-`logo-mark.svg`, `logo-full.svg`, `icon-192.png`, `icon-512.png`. Cores: azul #14244A, ouro #B58A2E, roxo litúrgico #4A2270, creme #FBF7EE.
+`logo.png` (logo oficial enviada pelo cliente), `logo-sm.png`, `icon-192.png`, `icon-512.png`. Cores: azul #142536, ouro #B98A3A / #F0CC85, creme #F7F1E3.

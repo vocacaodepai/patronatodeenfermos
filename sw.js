@@ -1,5 +1,5 @@
-const CACHE = "patronato-v1";
-const FILES = ["./", "index.html", "css/style.css", "js/data.js", "js/app.js", "assets/logo-mark.svg", "manifest.webmanifest"];
+const CACHE = "patronato-v2";
+const FILES = ["./", "index.html", "css/style.css", "js/data.js", "js/app.js", "assets/logo-sm.png", "manifest.webmanifest"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))));
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))));
 self.addEventListener("fetch", e => {
