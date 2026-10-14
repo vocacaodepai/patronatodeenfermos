@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Patronato de Enfermos</title>
+<meta name="description" content="Encontre a paróquia e o padre mais próximos de um hospital para a Unção dos Enfermos no Rio de Janeiro, Niterói e Baixada.">
+<meta name="theme-color" content="#14244A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <img src="assets/logo-mark.svg" alt="" class="mark" width="52" height="52">
+    <div class="brand"><small>PATRONATO DE</small><strong>Enfermos</strong></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Um padre perto de quem precisa da Unção dos Enfermos</h1>
+      <p>Digite o hospital ou a clínica e veja qual paróquia pode chegar mais rápido.</p>
+      <div class="search" role="search">
+        <label for="q" class="sr">Hospital ou clínica</label>
+        <input id="q" type="search" placeholder="Ex.: Barra D'Or, Copa Star, Icaraí…" autocomplete="off" enterkeyhint="search">
+        <ul id="sugg" class="sugg" hidden></ul>
+      </div>
+      <button id="near" class="ghost" type="button">📍 Hospitais perto de mim</button>
+      <div id="chips" class="chips" aria-label="Filtrar por região"></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="result" aria-live="polite"></section>
+  <section class="wrap" id="list"></section>
+
+  <section class="wrap info">
+    <div class="card soft">
+      <h2>O que é a Unção dos Enfermos?</h2>
+      <p>É o sacramento da Igreja para quem está gravemente doente, vai passar por uma cirurgia ou se aproxima da morte. Dá conforto, fortalece a esperança, perdoa pecados e, se Deus quiser, ajuda na recuperação.</p>
+    </div>
+    <div class="card soft">
+      <h2>Como pedir</h2>
+      <ol>
+        <li>Escolha o hospital onde o doente está.</li>
+        <li>Ligue para a paróquia indicada e diga o <b>hospital, o quarto e o nome</b> do enfermo.</li>
+        <li>Avise a recepção ou a capelania do hospital que um padre vai chegar.</li>
+      </ol>
+      <p class="emerg"><b>Emergência médica?</b> Ligue <a href="tel:192">192 (SAMU)</a>. Em perigo de morte, peça ao padre com urgência.</p>
+    </div>
+    <p class="note">Base em construção: coordenadas aproximadas; telefones e e-mails sendo levantados com cada paróquia. Ao ver "contato em levantamento", pergunte também na capelania do hospital.</p>
+  </section>
+</main>
+
+<footer><div class="wrap">✝ Patronato de Enfermos · Rio de Janeiro, Niterói e Baixada Fluminense</div></footer>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
