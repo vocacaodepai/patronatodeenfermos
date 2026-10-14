@@ -1,4 +1,4 @@
-# Patronato dos Enfermos
+# Patronato de Enfermos
 
 Site/app responsivo (PWA instalável) que indica a paróquia mais próxima de cada hospital ou clínica
 (Rio, Niterói, São Gonçalo e Baixada) para pedir a Unção dos Enfermos.

@@ -7,9 +7,10 @@ body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.5 system-ui,-
 .top{background:var(--navy);color:#fff;padding-top:env(safe-area-inset-top);border-bottom:3px solid var(--gold)}
 .top-in{display:flex;align-items:center;gap:14px;padding-top:10px;padding-bottom:10px}
 .mark{width:64px;height:64px;border-radius:50%;box-shadow:0 0 0 2px var(--gold)}
-.brand{display:flex;flex-direction:column;line-height:1;font-family:"Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif}
-.brand small{letter-spacing:.42em;font-size:11px;color:var(--gold-l);font-weight:600;margin-bottom:4px}
-.brand strong{font-size:32px;font-weight:600;font-style:italic;letter-spacing:.01em;background:linear-gradient(180deg,#FBDE97,#D4A354);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand{height:58px;width:auto;font-family:"Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif}
+.brand .b1{font-size:17px;font-weight:600;fill:var(--gold-l)}
+.brand .b2{font-size:46px;font-weight:700;fill:#fff}
+.brand .b3{fill:var(--gold)}
 .hero{background:linear-gradient(180deg,var(--navy),#1f3366);color:#fff;padding:26px 0 22px}
 .hero h1{font:600 clamp(24px,5.5vw,36px)/1.2 Georgia,serif;margin:0 0 8px}
 .hero p{margin:0 0 16px;color:#dfe5f5}
