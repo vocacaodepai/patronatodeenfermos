@@ -11,7 +11,7 @@
   const load = async uf => cache[uf] ||= fetch(`data/${uf}.json`).then(r => { if (!r.ok) throw 0; return r.json(); });
   const km = (a, b, c, d) => { const r = x => x * Math.PI / 180, h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2; return 12742 * Math.asin(Math.sqrt(h)); };
   const eta = d => Math.max(3, Math.round(d * 1.35 / 25 * 60));
-  const hosp = a => ({ id: a[0], nome: a[1], tipo: a[2], cidade: state.data.c[a[3]], bairro: a[4], end: a[5], tel: a[6], email: a[7], lat: a[8], lng: a[9], aprox: a[10], par: a[11] });
+  const hosp = a => ({ id: a[0], nome: a[1], tipo: a[2], cidade: state.data.c[a[3]], bairro: a[4], end: a[5], tel: a[6], email: a[7], lat: a[8], lng: a[9], pr: a[10], par: a[11] });
   const par = a => ({ nome: a[0], cidade: a[1], end: a[2], tel: a[3], email: a[4], site: a[5], lat: a[6], lng: a[7] });
   const opts = (sel, ph, items, val) => { sel.innerHTML = `<option value="">${esc(ph)}</option>` + items.map(([v, t]) => `<option value="${esc(v)}"${v === val ? " selected" : ""}>${esc(t)}</option>`).join(""); };
   const counts = arr => arr.reduce((m, x) => (m[x] = (m[x] || 0) + 1, m), {});
@@ -83,7 +83,7 @@
       <div class="card"><span class="badge alt">${esc(h.tipo.toUpperCase())}</span>
         <h2>${esc(h.nome)}</h2>
         <div class="meta">${esc(h.end)} · ${esc(h.bairro)} · ${esc(h.cidade)}/${esc(state.uf)}</div>
-        ${h.aprox ? `<div class="meta">Localização aproximada (centro do município).</div>` : ""}
+        ${h.pr ? `<div class="warn">⚠️ Localização ${["", "aproximada (pela rua)", "aproximada (pelo bairro)", "aproximada (centro do município)"][h.pr]}. As distâncias abaixo podem não ser exatas — <b>confirme por telefone</b>.</div>` : ""}
         <div class="btns">${h.tel ? `<a class="btn alt" href="tel:${esc(h.tel.replace(/[^\d+]/g, ""))}">📞 Hospital: ${esc(h.tel)}</a>` : ""}
           <a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${h.lat},${h.lng}">📍 Ver no mapa</a></div></div>
       ${ps.length ? ps.map(({ p, d, cur }, i) => `
@@ -91,6 +91,7 @@
           <span class="badge${i ? " alt" : ""}">${i === 0 ? "MAIS PRÓXIMA" : i + 1 + "ª OPÇÃO"}${cur ? " · INDICAÇÃO" : ""}</span>
           <h3>${esc(p.nome)}</h3>
           <div class="meta">${esc(p.end || "")}${p.end && p.cidade ? " · " : ""}${esc(p.cidade || "")}</div>
+          ${d > 10 ? `<div class="warn">⚠️ Paróquia distante: nenhuma foi encontrada mais perto no mapa.</div>` : ""}
           <div>≈ <span class="eta">${d.toFixed(1)} km · ${eta(d)} min</span> de carro <span class="meta">(estimativa)</span></div>
           ${p.tel || p.email || p.site ? "" : `<div class="pending">Contato não encontrado — ligue para a capelania do hospital.</div>`}
           <div class="btns">${contactBtns(p, h)}</div>

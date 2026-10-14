@@ -2,9 +2,28 @@
 Uso: python3 build_dados.py <hosp.pkl> <ov_br.parquet> <municipios.csv> <pasta_saida>"""
 import sys, re, json, os, numpy as np, pandas as pd, duckdb, unicodedata
 hp, ovp, munp, out = sys.argv[1:5]
+geo_files = sys.argv[5:]   # opcional: geo_fix.jsonl (saída de geocodificar.py)
 os.makedirs(out, exist_ok=True)
 norm = lambda s: re.sub(r"[^a-z0-9 ]", " ", unicodedata.normalize("NFD", str(s or "")).encode("ascii", "ignore").decode().lower())
 H = pd.read_pickle(hp).reset_index(drop=True)
+# ---- precisão da localização: 0 exata · 1 pela rua · 2 pelo bairro · 3 pelo município ----
+H["pr"] = np.where(H.aprox, 3, 0)
+geo = {}
+for gf in geo_files:
+    for l in open(gf):
+        g = json.loads(l)
+        if "lat" in g: geo[g["id"]] = g
+for i, r in H.iterrows():
+    g = geo.get(r.id)
+    if g and g["metodo"] in ("nome", "endereco"): H.loc[i, ["lat", "lng", "pr"]] = [g["lat"], g["lng"], 0]
+    elif g: H.loc[i, ["lat", "lng", "pr"]] = [g["lat"], g["lng"], 1]
+if "suspeita" in H:
+    ruim = H.suspeita & ~H.id.isin(geo) & (H.fora_do_bairro | H.ponto_repetido | H.longe_cidade)
+    bons = H[~H.suspeita & (H.pr == 0)].groupby("chave")[["lat", "lng"]].median().join(H[~H.suspeita & (H.pr == 0)].groupby("chave").id.count().rename("n"))
+    for i, r in H[ruim].iterrows():
+        if r.chave in bons.index and bons.loc[r.chave, "n"] >= 2: H.loc[i, ["lat", "lng", "pr"]] = [bons.loc[r.chave, "lat"], bons.loc[r.chave, "lng"], 2]
+        else: H.loc[i, ["lat", "lng", "pr"]] = [r.clat, r.clng, 3]
+print("precisão:", H.pr.value_counts().sort_index().to_dict())
 
 # ---- paróquias ----
 P = duckdb.sql(f"select * from '{ovp}'").df()
@@ -56,7 +75,7 @@ idx = []
 for uf, g in H.groupby("uf"):
     used = sorted({p[0] for r in g.par for p in r}); remap = {j: n for n, j in enumerate(used)}
     cidades = sorted(g.cidade.unique()); ci = {c: n for n, c in enumerate(cidades)}
-    h = [[r.id, r.nomeh, r.tipo, ci[r.cidade], r.bairro, r.end, r.tel, r.email, round(r.lat, 5), round(r.lng, 5), int(r.aprox), [[remap[p[0]], p[1], p[2]] for p in r.par]] for r in g.itertuples()]
+    h = [[r.id, r.nomeh, r.tipo, ci[r.cidade], r.bairro, r.end, r.tel, r.email, round(r.lat, 5), round(r.lng, 5), int(r.pr), [[remap[p[0]], p[1], p[2]] for p in r.par]] for r in g.itertuples()]
     p = [[P.nome[j], P.cidade[j], P.end[j], P.tel[j], P.email[j], P.site[j], round(P.lat[j], 5), round(P.lng[j], 5)] for j in used]
     json.dump({"uf": uf, "c": cidades, "h": h, "p": p}, open(f"{out}/{uf}.json", "w"), ensure_ascii=False, separators=(",", ":"))
     for c, gg in g.groupby("cidade"): idx.append([uf, round(gg.lat.mean(), 3), round(gg.lng.mean(), 3)])
