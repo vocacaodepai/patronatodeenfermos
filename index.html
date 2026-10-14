@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Patronato de Enfermos</title>
-<meta name="description" content="Encontre a paróquia e o padre mais próximos de um hospital para a Unção dos Enfermos no Rio de Janeiro, Niterói e Baixada.">
+<meta name="description" content="Encontre a paróquia e o padre mais próximos de um hospital para a Unção dos Enfermos em todo o Brasil.">
 <meta name="theme-color" content="#142536">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon-192.png" type="image/png">
@@ -28,18 +28,24 @@
     <div class="wrap">
       <img src="assets/logo.png" alt="" class="hero-logo" width="220" height="220">
       <h1>Um padre perto de quem precisa da Unção dos Enfermos</h1>
-      <p>Digite o hospital ou a clínica e veja qual paróquia pode chegar mais rápido.</p>
-      <div class="search" role="search">
-        <label for="q" class="sr">Hospital ou clínica</label>
-        <input id="q" type="search" placeholder="Ex.: Barra D'Or, Copa Star, Icaraí…" autocomplete="off" enterkeyhint="search">
-        <ul id="sugg" class="sugg" hidden></ul>
-      </div>
+      <p>Escolha o estado, a cidade e o hospital ou a clínica. Mostramos as paróquias católicas mais próximas.</p>
+      <form class="filters" id="filters" onsubmit="return false">
+        <div class="fld"><label for="uf">1 · Estado</label>
+          <select id="uf"><option value="">Escolha o estado…</option></select></div>
+        <div class="fld"><label for="city">2 · Cidade</label>
+          <select id="city" disabled><option value="">Primeiro escolha o estado</option></select></div>
+        <div class="fld"><label for="bairro">3 · Bairro</label>
+          <select id="bairro" disabled><option value="">Primeiro escolha a cidade</option></select></div>
+        <div class="fld"><label for="q">4 · Nome do hospital ou clínica <small>(opcional)</small></label>
+          <input id="q" type="search" placeholder="Ex.: Barra D'Or, Santa Casa…" autocomplete="off" disabled></div>
+        <div class="seg" role="group" aria-label="Tipo"><button type="button" class="on" data-t="">Todos</button><button type="button" data-t="Hospital">Hospitais</button><button type="button" data-t="Clínica">Clínicas</button></div>
+      </form>
       <button id="near" class="ghost" type="button">📍 Hospitais perto de mim</button>
-      <div id="chips" class="chips" aria-label="Filtrar por região"></div>
     </div>
   </section>
 
   <section class="wrap" id="result" aria-live="polite"></section>
+  <nav class="wrap crumbs" id="crumbs" aria-label="Você está em"></nav>
   <section class="wrap" id="list"></section>
 
   <section class="wrap info">
@@ -56,12 +62,12 @@
       </ol>
       <p class="emerg"><b>Emergência médica?</b> Ligue <a href="tel:192">192 (SAMU)</a>. Em perigo de morte, peça ao padre com urgência.</p>
     </div>
-    <p class="note">Base em construção: coordenadas aproximadas; telefones e e-mails sendo levantados com cada paróquia. Ao ver "contato em levantamento", pergunte também na capelania do hospital.</p>
+    <p class="note">Dados abertos: hospitais e clínicas do CNES (Ministério da Saúde); igrejas do Overture Maps/OpenStreetMap. Telefones e endereços podem estar desatualizados — <b>confirme por telefone</b> e pergunte também na capelania do hospital. Distâncias e tempos são estimativas em linha reta.</p>
   </section>
 </main>
 
-<footer><div class="wrap">Patronato de Enfermos · Rio de Janeiro, Niterói e Baixada Fluminense</div></footer>
-<script src="js/data.js"></script>
+<footer><div class="wrap">Patronato de Enfermos · Brasil</div></footer>
+
 <script src="js/app.js"></script>
 </body>
 </html>
