@@ -91,8 +91,8 @@
           <span class="badge${i ? " alt" : ""}">${i === 0 ? "MAIS PRÓXIMA" : i + 1 + "ª OPÇÃO"}${cur ? " · INDICAÇÃO" : ""}</span>
           <h3>${esc(p.nome)}</h3>
           <div class="meta">${esc(p.end || "")}${p.end && p.cidade ? " · " : ""}${esc(p.cidade || "")}</div>
-          ${d > 10 ? `<div class="warn">⚠️ Paróquia distante: nenhuma foi encontrada mais perto no mapa.</div>` : ""}
-          <div>≈ <span class="eta">${d.toFixed(1)} km · ${eta(d)} min</span> de carro <span class="meta">(estimativa)</span></div>
+          ${d > 10 && h.pr < 3 ? `<div class="warn">⚠️ Paróquia distante: nenhuma foi encontrada mais perto no mapa.</div>` : ""}
+          ${h.pr >= 3 ? `<div class="meta">Distância indisponível (localização do hospital não confirmada).</div>` : `<div>≈ <span class="eta">${d.toFixed(1)} km · ${eta(d)} min</span> de carro <span class="meta">(estimativa)</span></div>`}
           ${p.tel || p.email || p.site ? "" : `<div class="pending">Contato não encontrado — ligue para a capelania do hospital.</div>`}
           <div class="btns">${contactBtns(p, h)}</div>
         </article>`).join("") : `<div class="card"><p>Nenhuma paróquia encontrada por perto. Pergunte na capelania do hospital ou na diocese da região.</p></div>`}`;

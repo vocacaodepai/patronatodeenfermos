@@ -15,6 +15,8 @@ Gerados por `tools/` a partir de fontes abertas:
 Regerar: `prep_hospitais.py` (CNES + municípios IBGE) → `build_dados.py` (+ parquet do Overture). Ver cabeçalho de cada script.
 `tools/curadoria.json` força paróquias específicas para um hospital (ex.: Barra D'Or → Nossa Senhora da Vitória / Península).
 
+**Localização:** as coordenadas do CNES têm erros (ex.: Hospital Rio Mar vinha no Centro). `tools/suspeitas.py` marca ~20% como suspeitas e `tools/geocodificar.py` as corrige pelo nome/endereço no OpenStreetMap (Nominatim, 1 consulta/s). Cada local recebe um nível de precisão (exata, pela rua, pelo bairro, pelo município) e o site avisa quando não é exata. Auditoria de 250 locais não suspeitos: mediana de erro de 37 m, ~3% com erro > 3 km.
+
 **Limitações:** distância em linha reta (tempo = estimativa); telefones e endereços podem estar desatualizados; nomes do CNES vêm sem acento (restaurados parcialmente); nem toda igreja do Overture é paróquia-sede.
 
 ## Marca (`assets/`)
