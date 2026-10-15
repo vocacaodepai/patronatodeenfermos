@@ -34,7 +34,8 @@
   "'Católicas' independentes (antiga, livre, liberal, nacional, carismática...)": {
    "nome": [
     "catolic\\w*\\s+(antiga|livre|liberal|independente|nacional|gnostic\\w*|evangelic\\w*)",
-    "catolic\\w*\\s+apostolic\\w*\\s+(independente|carismatic\\w*|ortodox\\w*|nacional|livre|evangelic\\w*|gnostic\\w*)"
+    "catolic\\w*\\s+apostolic\\w*\\s+(independente|carismatic\\w*|ortodox\\w*|nacional|livre|evangelic\\w*|gnostic\\w*)",
+    "\\bindependente\\b"
    ],
    "site": [
     "catolicaantiga",
