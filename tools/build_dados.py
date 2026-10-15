@@ -34,11 +34,11 @@ P = duckdb.sql(f"select * from '{ovp}'").df()
 cat = P.cat.eq("roman_catholic_place_of_worship")
 nome_cat = P.nome.fillna("").map(norm).str.contains(r"\b(paroquia|catedral|basilica|santuario|igreja catolica|matriz)\b", regex=True)
 nao = P.nome.fillna("").map(norm).str.contains(r"assembleia|batista|universal|presbiter|adventista|evangel|metodista|congregacao crista|testemunha|luterana|mórmon|mormon|reino de deus|catedral do reino", regex=True)
-P = P[(cat | (P.cat.eq("religious_organization") & nome_cat)) & ~nao & P.nome.notna()].copy()
+P = P[(cat | P.cat.eq("religious_organization")) & ~nao & P.nome.notna()].copy()   # registros "religious_organization" só ficam se tiverem marca católica clara (abaixo)
 P = P[P.lat.between(-34, 6) & P.lng.between(-75, -33)]
 
 # ---- só Igreja Católica Apostólica ROMANA: tira ICAB, ortodoxas, anglicanas, independentes etc. (tools/exclusoes_nao_romanas.json) ----
-_rx = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "exclusoes_nao_romanas.json")))["grupos"]
+_cfg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "exclusoes_nao_romanas.json"))); _rx = _cfg["grupos"]
 _tn = P.nome.fillna("").map(norm); _ts = P.site.fillna("").map(norm)
 _fora = pd.Series(False, index=P.index); _contagem = {}
 for _g, _r in _rx.items():
@@ -46,6 +46,13 @@ for _g, _r in _rx.items():
     for _p in _r.get("nome", []): _m |= _tn.str.contains(_p, regex=True)
     for _p in _r.get("site", []): _m |= _ts.str.contains(_p, regex=True)
     _contagem[_g] = int((_m & ~_fora).sum()); _fora |= _m
+# ---- exige sinal de que é católica romana (a regra é "só entra com evidência", não só "sai o que achamos errado") ----
+_ex = _cfg["exigir_sinal_catolico"]; _te = P.email.fillna("").map(norm)
+_sinal = _tn.str.contains(_ex["nome"], regex=True) | _ts.str.contains(_ex["site_ou_email"], regex=True) | _te.str.contains(_ex["site_ou_email"], regex=True)
+_ro = P.cat.eq("religious_organization")
+_ro_ok = ~_ro | (_tn.str.contains(_ex["religious_organization_exige_nome"], regex=True) & _tn.str.contains(_ex["religious_organization_exige_santo"], regex=True))
+_m1 = ~_fora & ~_sinal; _contagem["Sem nenhum sinal de igreja católica no nome/site"] = int(_m1.sum()); _fora |= _m1
+_m2 = ~_fora & ~_ro_ok; _contagem["Registro genérico da fonte (religious_organization) sem marca católica clara"] = int(_m2.sum()); _fora |= _m2
 print("não romanas retiradas da base:", int(_fora.sum()), "de", len(P), _contagem)
 json.dump({"total_antes": len(P), "retiradas": int(_fora.sum()), "por_grupo": _contagem, "exemplos": {g: [] for g in _rx}}, open(os.path.join(os.environ.get("TMPDIR", "/tmp"), "retiradas_nao_romanas.json"), "w"), ensure_ascii=False)
 P = P[~_fora].copy()

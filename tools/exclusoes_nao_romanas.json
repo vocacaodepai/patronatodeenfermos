@@ -1,29 +1,142 @@
 {
-  "_comentario": "Regras (sobre texto sem acento e em minúsculas) para tirar da base os templos que NÃO são da Igreja Católica Apostólica Romana. 'Região/Residência Episcopal' e paróquias 'São Pio X' (o santo) são romanas e NÃO são excluídas.",
-  "grupos": {
-    "ICAB / Igreja Católica Apostólica Brasileira": {
-      "nome": ["\\bicab\\b", "catolic\\w*\\s+apostolic\\w*\\s+(do\\s+)?brasil", "catolic\\w*\\s+brasileir", "\\bigreja\\s+brasileira\\b"],
-      "site": ["(^|[^a-z])icab([^a-z]|$)", "igrejabrasileira"]
-    },
-    "Ortodoxas (inclui 'Católica Ortodoxa')": {
-      "nome": ["ortodox"],
-      "site": ["ortodox"]
-    },
-    "Anglicanas / Episcopais": {
-      "nome": ["anglican", "\\bigreja\\s+episcopal\\b", "episcopal\\s+(anglican|sul|carismatic)"],
-      "site": ["anglican"]
-    },
-    "'Católicas' independentes (antiga, livre, liberal, nacional, carismática...)": {
-      "nome": ["catolic\\w*\\s+(antiga|livre|liberal|independente|nacional|gnostic\\w*|evangelic\\w*)", "catolic\\w*\\s+apostolic\\w*\\s+(independente|carismatic\\w*|ortodox\\w*|nacional|livre|evangelic\\w*|gnostic\\w*)"],
-      "site": ["catolicaantiga", "padrejosemar"]
-    },
-    "Pentecostais / evangélicas que usam 'apostólica' ou 'catedral'": {
-      "nome": ["milagres\\s+apostolic", "apostolic\\w*.*(avivamento|fogo|pentecost)", "(avivamento|fogo|pentecost).*apostolic"],
-      "site": []
-    },
-    "Tradicionalistas fora da comunhão (FSSPX / Sociedade Sacerdotal São Pio X)": {
-      "nome": ["tradicionalista", "lefebvr", "\\bfsspx\\b", "(sociedade|fraternidade)\\s+sacerdotal\\s+sao\\s+pio\\s+x"],
-      "site": ["fsspx", "fsspx"]
-    }
+ "_comentario": "Regras (sobre texto sem acento e em minúsculas) para tirar da base os templos que NÃO são da Igreja Católica Apostólica Romana. 'Região/Residência Episcopal' e paróquias 'São Pio X' (o santo) são romanas e NÃO são excluídas.",
+ "grupos": {
+  "ICAB / Igreja Católica Apostólica Brasileira": {
+   "nome": [
+    "\\bicab\\b",
+    "catolic\\w*\\s+apostolic\\w*\\s+(do\\s+)?brasil",
+    "catolic\\w*\\s+brasileir",
+    "\\bigreja\\s+brasileira\\b"
+   ],
+   "site": [
+    "(^|[^a-z])icab([^a-z]|$)",
+    "igrejabrasileira"
+   ]
+  },
+  "Ortodoxas (inclui 'Católica Ortodoxa')": {
+   "nome": [
+    "ortodox"
+   ],
+   "site": [
+    "ortodox"
+   ]
+  },
+  "Anglicanas / Episcopais": {
+   "nome": [
+    "anglican",
+    "\\bigreja\\s+episcopal\\b",
+    "episcopal\\s+(anglican|sul|carismatic)"
+   ],
+   "site": [
+    "anglican"
+   ]
+  },
+  "'Católicas' independentes (antiga, livre, liberal, nacional, carismática...)": {
+   "nome": [
+    "catolic\\w*\\s+(antiga|livre|liberal|independente|nacional|gnostic\\w*|evangelic\\w*)",
+    "catolic\\w*\\s+apostolic\\w*\\s+(independente|carismatic\\w*|ortodox\\w*|nacional|livre|evangelic\\w*|gnostic\\w*)"
+   ],
+   "site": [
+    "catolicaantiga",
+    "padrejosemar"
+   ]
+  },
+  "Pentecostais / evangélicas que usam 'apostólica' ou 'catedral'": {
+   "nome": [
+    "milagres\\s+apostolic",
+    "apostolic\\w*.*(avivamento|fogo|pentecost)",
+    "(avivamento|fogo|pentecost).*apostolic"
+   ],
+   "site": []
+  },
+  "Tradicionalistas fora da comunhão (FSSPX / Sociedade Sacerdotal São Pio X)": {
+   "nome": [
+    "tradicionalista",
+    "lefebvr",
+    "\\bfsspx\\b",
+    "(sociedade|fraternidade)\\s+sacerdotal\\s+sao\\s+pio\\s+x"
+   ],
+   "site": [
+    "fsspx",
+    "fsspx"
+   ]
+  },
+  "Outras religiões e denominações (umbanda, espiritismo, evangélicas, pentecostais etc.)": {
+   "nome": [
+    "umbanda",
+    "candomble",
+    "quimbanda",
+    "\\bespirit\\w*",
+    "santo\\s+daime",
+    "\\bdaime\\b",
+    "mesquita",
+    "islam",
+    "sinagoga",
+    "judaic",
+    "budis",
+    "hindu",
+    "krishna",
+    "mormon",
+    "testemunha",
+    "salao\\s+do\\s+reino",
+    "batista",
+    "presbiter",
+    "metodista",
+    "adventista",
+    "luteran",
+    "pentecost",
+    "quadrangular",
+    "assembleia\\s+de\\s+deus",
+    "\\bad\\b",
+    "universal",
+    "reino\\s+de\\s+deus",
+    "deus\\s+e\\s+amor",
+    "avivamento",
+    "\\brenascer\\b",
+    "bola\\s+de\\s+neve",
+    "maranata",
+    "congregacao\\s+crista",
+    "igreja\\s+crista",
+    "evangelic",
+    "ministerio",
+    "nazareno",
+    "menonita",
+    "wesley",
+    "vineyard",
+    "internacional\\s+da\\s+graca",
+    "sara\\s+nossa\\s+terra",
+    "cristo\\s+vive",
+    "\\bliberal\\b",
+    "\\btenda\\b",
+    "tabernaculo",
+    "comunidade\\s+crista",
+    "igreja\\s+do\\s+evangelho",
+    "\\bsud\\b",
+    "igreja\\s+universal",
+    "assembly\\s+of\\s+god",
+    "baptist",
+    "pentecostal",
+    "jehovah"
+   ],
+   "site": [
+    "umbanda",
+    "candomble",
+    "espirita",
+    "daime",
+    "batista",
+    "universal",
+    "assembleia",
+    "pentecost",
+    "evangelic",
+    "igrejaliberal"
+   ]
   }
+ },
+ "exigir_sinal_catolico": {
+  "_comentario": "Depois das exclusões, o nome precisa ter ao menos um termo típico de igreja/devoção católica OU o site/e-mail ser de diocese/paróquia. Para registros da Overture que NÃO são da categoria 'católico romano' (religious_organization), exige-se além disso 'paróquia/católica/matriz' no nome.",
+  "nome": "(paroquia|santana|sant ?ana|sant ?anna|senhora|par\\b|catedral|basilica|santuario|capela|capelania|matriz|igreja|catolic|diocese|arquidiocese|prelazia|vicariato|mosteiro|convento|seminario|abadia|colegio catolico|nossa senhora|nossa sra|\\bn s\\b|\\bns\\b|sao |santo|santa |santos|sagrad|imaculad|sant ana|bom jesus|menino jesus|cristo rei|divino|espirito santo|perpetuo socorro|aparecida|fatima|lourdes|carmo|rosario|conceicao|penha|medalha|coracao|santissim|virgem|nosso senhor|senhor bom|catholic|church|parish|shrine|sanctuary|chapel|cathedral|our lady|saint|\\bst\\b|\\bsan\\b)",
+  "site_ou_email": "(arquidiocese|diocese|arqrio|arqnit|paroquia|cnbb|catolic|santuario|cancaonova|arquidiocesedefortaleza)",
+  "religious_organization_exige_nome": "(paroquia|catolic|matriz)",
+  "religious_organization_exige_santo": "(sao |santo|santa |santos|nossa senhora|nossa sra|\\bn s\\b|sagrad|imaculad|divino espirito|espirito santo|bom jesus|menino jesus|cristo rei|perpetuo socorro|aparecida|fatima|lourdes|carmo|rosario|conceicao|penha|medalha|coracao|santissim|virgem|nosso senhor)"
+ }
 }
