@@ -59,7 +59,10 @@
           <input id="q" type="search" placeholder="Ex.: Barra D'Or, Santa Casa…" autocomplete="off" disabled></div>
         <div class="seg" role="group" aria-label="Tipo"><button type="button" class="on" data-t="">Todos</button><button type="button" data-t="Hospital">Hospitais</button><button type="button" data-t="Clínica">Clínicas</button></div>
       </form>
-      <button id="near" class="ghost" type="button">📍 Hospitais perto de mim</button>
+      <div class="actions">
+        <button id="near" class="ghost" type="button">📍 Hospitais perto de mim</button>
+        <button id="installTop" class="ghost solid" type="button">📲 Salvar como aplicativo</button>
+      </div>
     </div>
   </section>
 
@@ -104,6 +107,7 @@
   </section>
 </main>
 
+<dialog id="installDlg" aria-label="Como salvar como aplicativo"></dialog>
 <footer><div class="wrap">Patronato de Enfermos · Brasil</div></footer>
 
 <script src="js/app.js"></script>

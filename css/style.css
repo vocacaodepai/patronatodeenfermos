@@ -74,3 +74,12 @@ select:focus,#q:focus{box-shadow:0 0 0 3px rgba(240,204,133,.5)}
   .top-in{justify-content:center}
   .hero h1,.hero p{text-align:center}
 }
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.actions .ghost{margin-top:0}
+.ghost.solid{background:var(--gold-l);color:var(--navy);border-color:var(--gold-l);font-weight:700}
+@media(max-width:899px){.actions{justify-content:center}}
+dialog#installDlg{border:0;border-radius:16px;padding:0;max-width:min(560px,92vw);width:100%;background:var(--cream);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+dialog#installDlg::backdrop{background:rgba(10,20,34,.7)}
+dialog#installDlg .install{margin:0;border:0;box-shadow:none;border-radius:16px 16px 0 0}
+.dlg-close{display:block;width:100%;padding:14px;border:0;background:var(--navy);color:#fff;font:inherit;font-weight:600;font-size:17px;cursor:pointer;border-radius:0 0 16px 16px}

@@ -152,6 +152,24 @@
   if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) $("#ios").open = true;
   else if (/Android/.test(ua)) $("#android").open = true;
 
+  // botão do topo: no Android instala direto; senão abre o passo a passo (iPhone/Android)
+  const dlg = $("#installDlg"), top = $("#installTop");
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  if (standalone) top.hidden = true;
+  top.addEventListener("click", async () => {
+    if (dip) { dip.prompt(); await dip.userChoice; dip = null; ib.hidden = true; return; }
+    const c = $("#install").cloneNode(true);
+    c.removeAttribute("id"); c.querySelectorAll("[id]").forEach(x => x.removeAttribute("id")); c.querySelector("button.btn")?.remove();
+    c.querySelectorAll("details").forEach(d => d.open = false);
+    const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    c.querySelectorAll("details")[ios ? 0 : 1].open = true;
+    dlg.innerHTML = ""; dlg.append(c);
+    const x = document.createElement("button"); x.type = "button"; x.className = "dlg-close"; x.textContent = "Fechar"; x.onclick = () => dlg.close(); dlg.append(x);
+    typeof dlg.showModal === "function" ? dlg.showModal() : $("#install").scrollIntoView({ behavior: "smooth" });
+  });
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  window.addEventListener("appinstalled", () => { top.hidden = true; });
+
   // link direto: #UF/idCNES
   fillUF();
   const m = location.hash.match(/^#([A-Z]{2})\/(\d+)$/);
