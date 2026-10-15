@@ -4,6 +4,11 @@ import sys, re, json, glob, os, requests, urllib3
 from concurrent.futures import ThreadPoolExecutor
 urllib3.disable_warnings()
 data, out = sys.argv[1:3]
+IGN = []   # --ignorar a.jsonl b.jsonl: não testa de novo os sites que já têm resultado nesses arquivos
+if "--ignorar" in sys.argv:
+    for a in sys.argv[sys.argv.index("--ignorar") + 1:]:
+        if a.startswith("--"): break
+        IGN.append(a)
 W = int(sys.argv[sys.argv.index("--workers") + 1]) if "--workers" in sys.argv else 40
 H = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "text/html,*/*"}
 def limpa(s):
@@ -29,7 +34,8 @@ def checa(s):
     return {"site": s, "status": "fora_do_ar", "codigo": c, "motivo": err or f"HTTP {c}", "tentado": cands[-1]}
 sites = sorted({p[5] for f in glob.glob(f"{data}/[A-Z][A-Z].json") for p in json.load(open(f))["p"] if p[5]})
 feitos = set()
-if os.path.exists(out): feitos = {json.loads(l)["site"] for l in open(out)}
+for f in IGN + [out]:
+    if os.path.exists(f): feitos |= {json.loads(l)["site"] for l in open(f)}
 fila = [s for s in sites if s not in feitos]; print(len(sites), "sites;", len(fila), "a testar", flush=True)
 with open(out, "a") as fo, ThreadPoolExecutor(W) as ex:
     for i, r in enumerate(ex.map(checa, fila)):

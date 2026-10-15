@@ -26,6 +26,6 @@ for uf, a in por_uf.items():
             if not idxs: print("!! paróquia da indicação não encontrada:", nome); continue
             dist = lambda p: 12742 * math.asin(math.sqrt(math.sin(math.radians(p[6] - h[8]) / 2) ** 2 + math.cos(math.radians(h[8])) * math.cos(math.radians(p[6])) * math.sin(math.radians(p[7] - h[9]) / 2) ** 2))
             i = min(idxs, key=lambda i: dist(d["p"][i])); forcadas.append([i, round(dist(d["p"][i]), 2), 1])
-        novo = (forcadas + [x for x in h[11] if x[0] not in [y[0] for y in forcadas]])[:3]
+        novo = (forcadas + [x for x in h[11] if x[0] not in [y[0] for y in forcadas]])[:int(os.environ.get("N_IGREJAS", 5))]
         if novo != h[11]: h[11] = novo; mudou += 1
     json.dump(d, open(f, "w"), ensure_ascii=False, separators=(",", ":")); print(uf, "ajustes aplicados:", mudou)
