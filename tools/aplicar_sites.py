@@ -1,7 +1,7 @@
 """Aplica o resultado da verificação nos dados: corrige o endereço, ou remove o site (e portanto o botão) quando não abre.
 Uso: python3 aplicar_sites.py <pasta data> <sites_check.jsonl> <sites_check2.jsonl>
 Regras: ok → usa o endereço que funcionou (prefere https); bloqueio_bot → mantém; recuperado → usa a variação que abriu
-(minúsculas, com/sem www, ou só o domínio); certificado inválido ou quebrado → remove; sites com '@' (e-mail colado) → remove;
+(minúsculas, com/sem www; NÃO aceita cair na página inicial genérica do domínio); certificado inválido ou quebrado → remove; sites com '@' (e-mail colado) → remove;
 domínios à venda/estacionados → remove."""
 import sys, json, glob, re, collections
 data, c1, c2 = sys.argv[1:4]
@@ -13,7 +13,7 @@ for l in open(c1):
         novo[r["site"]] = "" if PARK.search(r.get("final", "")) else r["tentado"]
 for l in open(c2):
     r = json.loads(l)
-    novo[r["site"]] = r["novo"] if r["status"] == "recuperado" and not PARK.search(r.get("final", "")) else ""
+    novo[r["site"]] = r["novo"] if r["status"] == "recuperado" and not r.get("so_dominio") and not PARK.search(r.get("final", "")) else ""
 for f in glob.glob(f"{data}/[A-Z][A-Z].json"):
     d = json.load(open(f)); mud = 0
     for p in d["p"]:

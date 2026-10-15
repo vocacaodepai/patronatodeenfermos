@@ -18,6 +18,8 @@ Regerar: `prep_hospitais.py` (CNES + municípios IBGE) → `build_dados.py` (+ p
 
 **Localização:** as coordenadas do CNES têm erros (ex.: Hospital Rio Mar vinha no Centro). `tools/suspeitas.py` marca ~20% como suspeitas e `tools/geocodificar.py` as corrige pelo nome/endereço no OpenStreetMap (Nominatim, 1 consulta/s). Cada local recebe um nível de precisão (exata, pela rua, pelo bairro, pelo município) e o site avisa quando não é exata. Auditoria de 250 locais não suspeitos: mediana de erro de 37 m, ~3% com erro > 3 km.
 
+**Sites das paróquias:** `tools/verificar_sites.py` testa cada link (prefere https), `tools/verificar_sites_2.py` retesta os que falharam (minúsculas, com/sem www) e `tools/aplicar_sites.py` corrige o endereço ou remove o botão quando o site não abre ou só leva à página inicial genérica do domínio. Na 1ª varredura (4.194 sites): 2.860 abriam, 114 só barravam robôs e 1.220 falharam; depois da correção sobraram 3.060 sites distintos.
+
 **Limitações:** distância em linha reta (tempo = estimativa); telefones e endereços podem estar desatualizados; nomes do CNES/Overture vêm com erros de acento e caixa (corrigidos por regras e léxico em `normalizar_nomes.py`, mas nomes próprios raros podem ficar sem acento); nem toda igreja do Overture é paróquia-sede.
 
 ## Marca (`assets/`)
