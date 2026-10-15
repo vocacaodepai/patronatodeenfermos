@@ -68,3 +68,12 @@ select:focus,#q:focus{box-shadow:0 0 0 3px rgba(240,204,133,.5)}
 .install li{margin:6px 0}
 @media all and (display-mode:standalone){.install{display:none}}
 [hidden]{display:none!important}
+
+.again{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.again .btn{flex:1 1 200px;justify-content:center;cursor:pointer;border:0;font:inherit;font-weight:600}
+.again .btn.alt{border:1.5px solid var(--navy)}
+@media(max-width:899px){
+  .top-in{justify-content:center}
+  .hero-logo{display:block;width:150px;height:150px;margin:0 auto 14px;border-radius:50%;box-shadow:0 0 0 3px var(--gold-l),0 10px 26px rgba(0,0,0,.35)}
+  .hero h1,.hero p{text-align:center}
+}

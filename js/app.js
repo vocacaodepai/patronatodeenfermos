@@ -77,6 +77,8 @@
     return b.join("");
   }
 
+  const AGAIN = `<div class="again"><button type="button" class="btn newsearch" data-a="outro">🔍 Buscar outro hospital</button><button type="button" class="btn alt newsearch" data-a="zero">↺ Nova busca do zero</button></div>`;
+
   function show(h) {
     const ps = h.par.map(([i, d, cur]) => ({ p: par(state.data.p[i]), d, cur }));
     $("#result").innerHTML = `
@@ -86,6 +88,7 @@
         ${h.pr ? `<div class="warn">⚠️ Localização ${["", "aproximada (pela rua)", "aproximada (pelo bairro)", "aproximada (centro do município)"][h.pr]}. As distâncias abaixo podem não ser exatas — <b>confirme por telefone</b>.</div>` : ""}
         <div class="btns">${h.tel ? `<a class="btn alt" href="tel:${esc(h.tel.replace(/[^\d+]/g, ""))}">📞 Hospital: ${esc(h.tel)}</a>` : ""}
           <a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${h.lat},${h.lng}">📍 Ver no mapa</a></div></div>
+      ${AGAIN}
       ${ps.length ? ps.map(({ p, d, cur }, i) => `
         <article class="card par${i === 0 ? " first" : ""}">
           <span class="badge${i ? " alt" : ""}">${i === 0 ? "MAIS PRÓXIMA" : i + 1 + "ª OPÇÃO"}${cur ? " · INDICAÇÃO" : ""}</span>
@@ -95,12 +98,24 @@
           ${h.pr >= 3 ? `<div class="meta">Distância indisponível (localização do hospital não confirmada).</div>` : `<div>≈ <span class="eta">${d.toFixed(1)} km · ${eta(d)} min</span> de carro <span class="meta">(estimativa)</span></div>`}
           ${p.tel || p.email || p.site ? "" : `<div class="pending">Contato não encontrado — ligue para a capelania do hospital.</div>`}
           <div class="btns">${contactBtns(p, h)}</div>
-        </article>`).join("") : `<div class="card"><p>Nenhuma paróquia encontrada por perto. Pergunte na capelania do hospital ou na diocese da região.</p></div>`}`;
+        </article>`).join("") : `<div class="card"><p>Nenhuma paróquia encontrada por perto. Pergunte na capelania do hospital ou na diocese da região.</p></div>`}
+      ${AGAIN}`;
     $("#result").scrollIntoView({ behavior: "smooth", block: "start" });
     try { history.replaceState(null, "", `#${state.uf}/${h.id}`); } catch {}
   }
 
   const find = id => state.data && state.data.h.map(hosp).find(h => h.id === id);
+
+  // ---------- nova busca ----------
+  function novaBusca(modo) {
+    $("#result").innerHTML = "";
+    try { history.replaceState(null, "", location.pathname); } catch {}
+    if (modo === "zero") { state.near = null; $("#uf").value = ""; $("#q").value = ""; setUF(""); }
+    else { state.q = ""; $("#q").value = ""; state.shown = PAGE; if (state.near) { state.near = null; refresh(); } else renderList(); }
+    $("#filters").scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => { const el = modo !== "zero" && !$("#q").disabled ? $("#q") : $("#uf"); el.focus({ preventScroll: true }); }, 400);
+  }
+  $("#result").addEventListener("click", e => { const b = e.target.closest(".newsearch"); if (b) novaBusca(b.dataset.a); });
 
   // ---------- eventos ----------
   $("#uf").addEventListener("change", e => setUF(e.target.value));
