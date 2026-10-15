@@ -131,6 +131,13 @@
     "evangelic",
     "igrejaliberal"
    ]
+  },
+  "Pastoral da Comunicação (Pascom) e perfis que não são a igreja em si": {
+   "nome": [
+    "\\bpascom\\b",
+    "comunica\\s+paroquia"
+   ],
+   "site": []
   }
  },
  "exigir_sinal_catolico": {
