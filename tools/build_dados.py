@@ -48,7 +48,7 @@ for _g, _r in _rx.items():
     _contagem[_g] = int((_m & ~_fora).sum()); _fora |= _m
 # ---- exige sinal de que é católica romana (a regra é "só entra com evidência", não só "sai o que achamos errado") ----
 _ex = _cfg["exigir_sinal_catolico"]; _te = P.email.fillna("").map(norm)
-_sinal = _tn.str.contains(_ex["nome"], regex=True) | _ts.str.contains(_ex["site_ou_email"], regex=True) | _te.str.contains(_ex["site_ou_email"], regex=True)
+_sinal = _tn.str.contains(_ex["nome"], regex=True)   # o NOME precisa indicar igreja/devoção católica; site de diocese sozinho não basta (evita Pascom, CNBB, cúrias, residências)
 _ro = P.cat.eq("religious_organization")
 _ro_ok = ~_ro | (_tn.str.contains(_ex["religious_organization_exige_nome"], regex=True) & _tn.str.contains(_ex["religious_organization_exige_santo"], regex=True))
 _m1 = ~_fora & ~_sinal; _contagem["Sem nenhum sinal de igreja católica no nome/site"] = int(_m1.sum()); _fora |= _m1
