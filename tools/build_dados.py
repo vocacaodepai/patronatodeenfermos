@@ -36,6 +36,19 @@ nome_cat = P.nome.fillna("").map(norm).str.contains(r"\b(paroquia|catedral|basil
 nao = P.nome.fillna("").map(norm).str.contains(r"assembleia|batista|universal|presbiter|adventista|evangel|metodista|congregacao crista|testemunha|luterana|mórmon|mormon|reino de deus|catedral do reino", regex=True)
 P = P[(cat | (P.cat.eq("religious_organization") & nome_cat)) & ~nao & P.nome.notna()].copy()
 P = P[P.lat.between(-34, 6) & P.lng.between(-75, -33)]
+
+# ---- só Igreja Católica Apostólica ROMANA: tira ICAB, ortodoxas, anglicanas, independentes etc. (tools/exclusoes_nao_romanas.json) ----
+_rx = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "exclusoes_nao_romanas.json")))["grupos"]
+_tn = P.nome.fillna("").map(norm); _ts = P.site.fillna("").map(norm)
+_fora = pd.Series(False, index=P.index); _contagem = {}
+for _g, _r in _rx.items():
+    _m = pd.Series(False, index=P.index)
+    for _p in _r.get("nome", []): _m |= _tn.str.contains(_p, regex=True)
+    for _p in _r.get("site", []): _m |= _ts.str.contains(_p, regex=True)
+    _contagem[_g] = int((_m & ~_fora).sum()); _fora |= _m
+print("não romanas retiradas da base:", int(_fora.sum()), "de", len(P), _contagem)
+json.dump({"total_antes": len(P), "retiradas": int(_fora.sum()), "por_grupo": _contagem, "exemplos": {g: [] for g in _rx}}, open(os.path.join(os.environ.get("TMPDIR", "/tmp"), "retiradas_nao_romanas.json"), "w"), ensure_ascii=False)
+P = P[~_fora].copy()
 def tc(s):
     s = re.sub(r"\s+", " ", str(s)).strip()
     if s.isupper() or s.islower():
