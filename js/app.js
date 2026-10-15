@@ -128,6 +128,15 @@
     }, () => alert("Não consegui obter sua localização. Use os filtros."), { enableHighAccuracy: true, timeout: 10000 });
   });
 
+  // instalar como app: botão nativo no Android/Chrome; passo a passo no iOS
+  let dip; const ib = $("#installBtn");
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); dip = e; ib.hidden = false; });
+  ib.addEventListener("click", async () => { if (!dip) return; dip.prompt(); await dip.userChoice; dip = null; ib.hidden = true; });
+  window.addEventListener("appinstalled", () => { $("#install").hidden = true; });
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) $("#ios").open = true;
+  else if (/Android/.test(ua)) $("#android").open = true;
+
   // link direto: #UF/idCNES
   fillUF();
   const m = location.hash.match(/^#([A-Z]{2})\/(\d+)$/);
