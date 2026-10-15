@@ -81,3 +81,7 @@ for uf, g in H.groupby("uf"):
     for c, gg in g.groupby("cidade"): idx.append([uf, round(gg.lat.mean(), 3), round(gg.lng.mean(), 3)])
     print(uf, len(h), "locais,", len(p), "paróquias,", os.path.getsize(f"{out}/{uf}.json") // 1024, "KB")
 json.dump(idx, open(f"{out}/index.json", "w"), separators=(",", ":"))
+
+# ---- nomes em português do Brasil (acentos, tradução de nomes em inglês, caixa, lixo de cadastro) ----
+import subprocess
+subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "normalizar_nomes.py"), "--pasta", out], check=True)
