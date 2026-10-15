@@ -1,0 +1,16 @@
+{
+  "contatos": [
+    {
+      "uf": "RJ", "cidade": "Niterói", "nome": "Catedral de Niterói",
+      "tel": "+552126202529",
+      "fonte": "GCatholic (https://gcatholic.org/churches/brazil/2653.htm) — confirmar com a Arquidiocese de Niterói"
+    }
+  ],
+  "indicacoes": [
+    {
+      "uf": "RJ", "hospital_id": "484644", "hospital": "Hospital de Clínicas do Ingá", "nome": "Hospital de Clínicas do Ingá", "bairro": "Ingá",
+      "paroquias": ["Catedral de Niterói"],
+      "fonte": "Indicação do Padre Lucas: a Catedral atende este hospital"
+    }
+  ]
+}
