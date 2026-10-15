@@ -83,3 +83,5 @@ dialog#installDlg{border:0;border-radius:16px;padding:0;max-width:min(560px,92vw
 dialog#installDlg::backdrop{background:rgba(10,20,34,.7)}
 dialog#installDlg .install{margin:0;border:0;box-shadow:none;border-radius:16px 16px 0 0}
 .dlg-close{display:block;width:100%;padding:14px;border:0;background:var(--navy);color:#fff;font:inherit;font-weight:600;font-size:17px;cursor:pointer;border-radius:0 0 16px 16px}
+/* respiro da logo no celular: 1,5 cm em cima e embaixo */
+@media(max-width:899px){.top-in{padding-top:1.5cm;padding-bottom:1.5cm}}
