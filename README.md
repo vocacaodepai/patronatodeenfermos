@@ -21,6 +21,8 @@ Regerar tudo, na ordem certa: `tools/gerar_tudo.sh [pasta_das_entradas] [pasta_s
 
 **Sites das paróquias:** `tools/verificar_sites.py` testa cada link (prefere https), `tools/verificar_sites_2.py` retesta os que falharam (minúsculas, com/sem www) e `tools/aplicar_sites.py` corrige o endereço ou remove o botão quando o site não abre ou só leva à página inicial genérica do domínio. Na 1ª varredura (4.194 sites): 2.860 abriam, 114 só barravam robôs e 1.220 falharam; depois da correção sobraram 3.060 sites distintos.
 
+**Só Igreja Católica Apostólica Romana:** `tools/exclusoes_nao_romanas.json` define as regras. Uma igreja só entra se a fonte a classificar como católica romana e o NOME indicar igreja/devoção católica; saem ICAB, ortodoxas, anglicanas, independentes, outras religiões e denominações (umbanda, espiritismo, evangélicas, pentecostais etc.) e perfis que não são a igreja (Pascom, cúrias, grupos). "Região/Residência Episcopal" e "São Pio X" não são confundidos.
+
 **Limitações:** distância em linha reta (tempo = estimativa); telefones e endereços podem estar desatualizados; nomes do CNES/Overture vêm com erros de acento e caixa (corrigidos por regras e léxico em `normalizar_nomes.py`, mas nomes próprios raros podem ficar sem acento); nem toda igreja do Overture é paróquia-sede.
 
 ## Marca (`assets/`)
