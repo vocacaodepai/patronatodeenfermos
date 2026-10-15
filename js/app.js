@@ -79,6 +79,15 @@
 
   const AGAIN = `<div class="again"><button type="button" class="btn newsearch" data-a="outro">🔍 Buscar outro hospital</button><button type="button" class="btn alt newsearch" data-a="zero">↺ Nova busca do zero</button></div>`;
 
+  // "MAIS PRÓXIMA" só para a de menor distância; indicação manual (curadoria) é rotulada à parte
+  const rotulo = (i, d, cur, ps) => {
+    const menor = Math.min(...ps.map(x => x.d));
+    if (cur && d === menor) return "MAIS PRÓXIMA · INDICAÇÃO";
+    if (cur) return "INDICAÇÃO";
+    if (d === menor) return "MAIS PRÓXIMA";
+    return (i + 1) + "ª OPÇÃO";
+  };
+
   function show(h) {
     const ps = h.par.map(([i, d, cur]) => ({ p: par(state.data.p[i]), d, cur }));
     $("#result").innerHTML = `
@@ -91,7 +100,7 @@
       ${AGAIN}
       ${ps.length ? ps.map(({ p, d, cur }, i) => `
         <article class="card par${i === 0 ? " first" : ""}">
-          <span class="badge${i ? " alt" : ""}">${i === 0 ? "MAIS PRÓXIMA" : i + 1 + "ª OPÇÃO"}${cur ? " · INDICAÇÃO" : ""}</span>
+          <span class="badge${i ? " alt" : ""}">${rotulo(i, d, cur, ps)}</span>
           <h3>${esc(p.nome)}</h3>
           <div class="meta">${esc(p.end || "")}${p.end && p.cidade ? " · " : ""}${esc(p.cidade || "")}</div>
           ${d > 10 && h.pr < 3 ? `<div class="warn">⚠️ Paróquia distante: nenhuma foi encontrada mais perto no mapa.</div>` : ""}
