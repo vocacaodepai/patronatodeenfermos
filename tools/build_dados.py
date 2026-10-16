@@ -62,6 +62,9 @@ def tc(s):
         s = s.title(); s = re.sub(r"\b(De|Da|Do|Das|Dos|E)\b", lambda m: m.group(1).lower(), s)
     return s
 P["nome"] = P.nome.map(tc)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from normalizar_nomes import normalizar as _norm_pt          # nomes em português ANTES de procurar duplicatas ("Church of X" = "Igreja de X")
+P["nome"] = [_norm_pt(n, "p", str(u or "").upper()) for n, u in zip(P.nome, P.uf)]
 P["k"] = P.nome.map(norm) + P.lat.round(3).astype(str) + P.lng.round(3).astype(str)  # ~100 m
 P = P.sort_values("tel", na_position="last").drop_duplicates("k").reset_index(drop=True)
 for c in ["tel", "email", "site", "end", "cidade"]: P[c] = P[c].fillna("")
@@ -79,6 +82,18 @@ for _, g in P.sort_values("ord").groupby("nn"):
         else: mant.append((la, lo))
 P = P.drop(index=list(drop)).reset_index(drop=True)
 print(len(drop), "quase-duplicatas removidas;", len(P), "restam")
+
+# ---- une a MESMA igreja cadastrada mais de uma vez; corrige Paróquia→Santuário/Basílica pelo perfil; conserta telefones sem DDD ----
+import unir_duplicatas as _ud
+for c in ["tel", "email", "site", "end", "cidade", "social"]:
+    if c in P: P[c] = P[c].fillna("")
+P, _rel_u = _ud.unir(P)
+P, _mud = _ud.corrigir_tipo_pelo_perfil(P)
+_UF = {"11":"RO","12":"AC","13":"AM","14":"RR","15":"PA","16":"AP","17":"TO","21":"MA","22":"PI","23":"CE","24":"RN","25":"PB","26":"PE","27":"AL","28":"SE","29":"BA","31":"MG","32":"ES","33":"RJ","35":"SP","41":"PR","42":"SC","43":"RS","50":"MS","51":"MT","52":"GO","53":"DF"}
+_mun = pd.read_csv(munp, dtype={"codigo_ibge": str, "codigo_uf": str}); _ddd = {(_UF.get(r.codigo_uf, ""), norm(r.nome)): int(r.ddd) for r in _mun.itertuples()}
+P, _rel_t = _ud.corrigir_telefones(P, _ddd)
+print("igrejas duplicadas unidas:", _rel_u["removidos"], "| rótulo corrigido para Santuário/Basílica:", len(_mud), "|", _rel_t)
+json.dump({"unir": _rel_u, "rotulo": _mud, "telefones": _rel_t}, open(os.environ.get("REL_UNIR", "/tmp/relatorio_unir.json"), "w"), ensure_ascii=False)
 
 # ---- as N_IGREJAS mais próximas ----
 R = np.radians
