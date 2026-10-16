@@ -24,7 +24,9 @@ def tipo_de(nome):
 def nucleo(nome, cidade=""):
     n = re.split(r"\s[-–|/]\s|,|\(", nome)[0]
     cid = {w for w in norm(cidade).split() if len(w) >= 4}                 # o nome da cidade no fim do nome não distingue igrejas
-    return [w for w in norm(n).split() if w not in GEN and w not in cid]
+    base = [w for w in norm(n).split() if w not in GEN]
+    sem_cidade = [w for w in base if w not in cid]
+    return sem_cidade or base                                               # se a igreja se chama como a cidade (Santa Teresa, Mercês...), mantém
 
 def tem_sufixo(nome): return bool(re.search(r"\s[-–|/]\s|,|\(", nome))
 
@@ -41,8 +43,11 @@ def mesmo_templo(i, j, P, tp, nu):
     a, b = set(nu[i]), set(nu[j])
     if not a or not b: return False
     d = km((P.lat.iat[i], P.lng.iat[i]), (P.lat.iat[j], P.lng.iat[j]))
-    if a == b: return d <= 0.25
-    if (a <= b or b <= a) and min(len(a), len(b)) >= 2: return d <= 0.10
+    ei, ej = norm(P.end.iat[i]), norm(P.end.iat[j])
+    if a == b:
+        if ei and ei == ej and len(ei) >= 8: return d <= 1.5          # mesmo nome e mesmo endereço (coordenadas diferentes): é a mesma igreja
+        return d <= 0.40
+    if (a <= b or b <= a) and min(len(a), len(b)) >= 2: return d <= 0.20
     return d <= 0.10 and len(a & b) / len(a | b) >= 0.75
 
 def tel_valido(t): return bool(re.fullmatch(r"\+55\d{10,11}", t or ""))

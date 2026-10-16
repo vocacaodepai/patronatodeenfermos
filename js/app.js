@@ -79,6 +79,15 @@
 
   const AGAIN = `<div class="again"><button type="button" class="btn newsearch" data-a="outro">🔍 Buscar outro hospital</button><button type="button" class="btn alt newsearch" data-a="zero">↺ Nova busca do zero</button></div>`;
 
+  // Mesmo nome em mais de uma opção (igrejas diferentes): acrescenta a cidade (ou o endereço) para distinguir
+  const nomeUnico = (p, ps) => {
+    const iguais = ps.filter(x => x.p.nome === p.nome);
+    if (iguais.length < 2) return p.nome;
+    const cidades = new Set(iguais.map(x => x.p.cidade));
+    const extra = cidades.size > 1 ? p.cidade : (p.end || "");
+    return extra ? `${p.nome} (${extra})` : p.nome;
+  };
+
   // "MAIS PRÓXIMA" só para a de menor distância; indicação manual (curadoria) é rotulada à parte
   const rotulo = (i, d, cur, ps) => {
     const menor = Math.min(...ps.map(x => x.d));
@@ -101,7 +110,7 @@
       ${ps.length ? ps.map(({ p, d, cur }, i) => `
         <article class="card par${i === 0 ? " first" : ""}">
           <span class="badge${i ? " alt" : ""}">${rotulo(i, d, cur, ps)}</span>
-          <h3>${esc(p.nome)}</h3>
+          <h3>${esc(nomeUnico(p, ps))}</h3>
           <div class="meta">${esc(p.end || "")}${p.end && p.cidade ? " · " : ""}${esc(p.cidade || "")}</div>
           ${d > 10 && h.pr < 3 ? `<div class="warn">⚠️ Paróquia distante: nenhuma foi encontrada mais perto no mapa.</div>` : ""}
           ${h.pr >= 3 ? `<div class="meta">Distância indisponível (localização do hospital não confirmada).</div>` : `<div>≈ <span class="eta">${d.toFixed(1)} km · ${eta(d)} min</span> de carro <span class="meta">(estimativa)</span></div>`}

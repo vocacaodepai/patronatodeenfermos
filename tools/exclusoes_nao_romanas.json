@@ -141,7 +141,7 @@
   },
   "Não é uma igreja (diocese, cúria, vicariato, mitra, secretaria, salão, fraternidade, pastoral, escola...)": {
    "nome": [
-    "^(diocese|arquidiocese|vicariato|mitra|curia|obras\\s+sociais|secretaria|salao|casa\\s+paroquial|centro\\s+paroquial|escritorio|fraternidade|pastoral|movimento|grupo|seminario|colegio|escola|instituto|fundacao|associacao|hospital|residencia|regiao|area\\s+pastoral|setor|forania|prelazia)\\b"
+    "^((roman\\s+)?catholic\\s+)?(diocese|archdiocese|arquidiocese|vicariate|chancery|bishopric|vicariato|mitra|curia|obras\\s+sociais|secretaria|salao|casa\\s+paroquial|centro\\s+paroquial|escritorio|fraternidade|pastoral|movimento|grupo|seminario|colegio|escola|instituto|fundacao|associacao|hospital|residencia|regiao|area\\s+pastoral|setor|forania|prelazia)\\b"
    ],
    "site": []
   }
