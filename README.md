@@ -23,6 +23,8 @@ Regerar tudo, na ordem certa: `tools/gerar_tudo.sh [pasta_das_entradas] [pasta_s
 
 **Só Igreja Católica Apostólica Romana:** `tools/exclusoes_nao_romanas.json` define as regras. Uma igreja só entra se a fonte a classificar como católica romana e o NOME indicar igreja/devoção católica; saem ICAB, ortodoxas, anglicanas, independentes, outras religiões e denominações (umbanda, espiritismo, evangélicas, pentecostais etc.) e perfis que não são a igreja (Pascom, cúrias, grupos). "Região/Residência Episcopal" e "São Pio X" não são confundidos.
 
+**Igrejas duplicadas e nomes:** `tools/unir_duplicatas.py` une registros da mesma igreja (mesmo nome/endereço ou poucos metros de distância; escolhe o tipo mais específico: Santuário, Basílica, Catedral), corrige "Paróquia" para "Santuário/Basílica" quando o próprio perfil da igreja diz isso, e conserta telefones sem DDD (remove os inválidos). Entidades que não são igrejas (diocese, vicariato, secretaria, salão, pastoral, Pascom...) saem da base.
+
 **Limitações:** distância em linha reta (tempo = estimativa); telefones e endereços podem estar desatualizados; nomes do CNES/Overture vêm com erros de acento e caixa (corrigidos por regras e léxico em `normalizar_nomes.py`, mas nomes próprios raros podem ficar sem acento); nem toda igreja do Overture é paróquia-sede.
 
 ## Marca (`assets/`)
