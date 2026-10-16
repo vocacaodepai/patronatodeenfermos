@@ -4,18 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Patronato de Enfermos</title>
-<meta name="description" content="Encontre a paróquia e o padre mais próximos de um hospital para a Unção dos Enfermos no Rio de Janeiro, Niterói e Baixada.">
-<meta name="theme-color" content="#14244A">
+<meta name="description" content="Encontre a paróquia e o padre mais próximos de um hospital para a Unção dos Enfermos em todo o Brasil.">
+<link rel="canonical" href="https://patronatodeenfermos.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Patronato de Enfermos">
+<meta property="og:title" content="Patronato de Enfermos — um padre perto de quem precisa">
+<meta property="og:description" content="Encontre a paróquia católica mais próxima de um hospital ou clínica para pedir a Unção dos Enfermos. Todo o Brasil.">
+<meta property="og:url" content="https://patronatodeenfermos.vercel.app/">
+<meta property="og:image" content="https://patronatodeenfermos.vercel.app/assets/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="840">
+<meta property="og:image:alt" content="Logo do Patronato de Enfermos: um padre ao lado do leito de um enfermo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Patronato de Enfermos">
+<meta name="twitter:description" content="Encontre a paróquia mais próxima de um hospital para a Unção dos Enfermos.">
+<meta name="twitter:image" content="https://patronatodeenfermos.vercel.app/assets/og-image.jpg">
+<meta name="theme-color" content="#142536">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Patronato">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header class="top">
   <div class="wrap top-in">
-    <img src="assets/logo-mark.svg" alt="" class="mark" width="52" height="52">
-    <div class="brand"><small>PATRONATO DE</small><strong>Enfermos</strong></div>
+    <img src="assets/logo-sm.png" alt="Patronato de Enfermos" class="mark" width="64" height="64">
+    <svg class="brand" viewBox="0 0 300 74" role="img" aria-label="Patronato de Enfermos">
+      <text x="1" y="19" textLength="298" lengthAdjust="spacing" class="b1">PATRONATO DE</text>
+      <rect x="1" y="27" width="298" height="1.5" class="b3"/>
+      <text x="1" y="68" textLength="298" lengthAdjust="spacing" class="b2">ENFERMOS</text>
+    </svg>
   </div>
 </header>
 
@@ -23,18 +47,27 @@
   <section class="hero">
     <div class="wrap">
       <h1>Um padre perto de quem precisa da Unção dos Enfermos</h1>
-      <p>Digite o hospital ou a clínica e veja qual paróquia pode chegar mais rápido.</p>
-      <div class="search" role="search">
-        <label for="q" class="sr">Hospital ou clínica</label>
-        <input id="q" type="search" placeholder="Ex.: Barra D'Or, Copa Star, Icaraí…" autocomplete="off" enterkeyhint="search">
-        <ul id="sugg" class="sugg" hidden></ul>
+      <p>Escolha o estado, a cidade e o hospital ou a clínica. Mostramos as paróquias católicas mais próximas.</p>
+      <form class="filters" id="filters" onsubmit="return false">
+        <div class="fld"><label for="uf">1 · Estado</label>
+          <select id="uf"><option value="">Escolha o estado…</option></select></div>
+        <div class="fld"><label for="city">2 · Cidade</label>
+          <select id="city" disabled><option value="">Primeiro escolha o estado</option></select></div>
+        <div class="fld"><label for="bairro">3 · Bairro</label>
+          <select id="bairro" disabled><option value="">Primeiro escolha a cidade</option></select></div>
+        <div class="fld"><label for="q">4 · Nome do hospital ou clínica <small>(opcional)</small></label>
+          <input id="q" type="search" placeholder="Ex.: Barra D'Or, Santa Casa…" autocomplete="off" disabled></div>
+        <div class="seg" role="group" aria-label="Tipo"><button type="button" class="on" data-t="">Todos</button><button type="button" data-t="Hospital">Hospitais</button><button type="button" data-t="Clínica">Clínicas</button></div>
+      </form>
+      <div class="actions">
+        <button id="near" class="ghost" type="button">📍 Hospitais perto de mim</button>
+        <button id="installTop" class="ghost solid" type="button">📲 Salvar como aplicativo</button>
       </div>
-      <button id="near" class="ghost" type="button">📍 Hospitais perto de mim</button>
-      <div id="chips" class="chips" aria-label="Filtrar por região"></div>
     </div>
   </section>
 
   <section class="wrap" id="result" aria-live="polite"></section>
+  <nav class="wrap crumbs" id="crumbs" aria-label="Você está em"></nav>
   <section class="wrap" id="list"></section>
 
   <section class="wrap info">
@@ -51,12 +84,35 @@
       </ol>
       <p class="emerg"><b>Emergência médica?</b> Ligue <a href="tel:192">192 (SAMU)</a>. Em perigo de morte, peça ao padre com urgência.</p>
     </div>
-    <p class="note">Base em construção: coordenadas aproximadas; telefones e e-mails sendo levantados com cada paróquia. Ao ver "contato em levantamento", pergunte também na capelania do hospital.</p>
+    <div class="card soft install" id="install">
+      <h2>📲 Use como aplicativo no celular</h2>
+      <p>Salve o Patronato de Enfermos na tela inicial e abra com um toque, como um aplicativo. Não precisa de loja de aplicativos.</p>
+      <button id="installBtn" class="btn" type="button" hidden>Instalar agora</button>
+      <details id="ios"><summary><b>iPhone / iPad (Safari)</b></summary>
+        <ol>
+          <li>Abra este site no <b>Safari</b> (é o jeito mais garantido no iPhone).</li>
+          <li>Toque no botão <b>Compartilhar</b> (quadrado com uma seta para cima, na barra inferior).</li>
+          <li>Role a lista e toque em <b>“Adicionar à Tela de Início”</b>.</li>
+          <li>Toque em <b>Adicionar</b>. O ícone aparece na sua tela inicial.</li>
+        </ol></details>
+      <details id="android"><summary><b>Android (Chrome)</b></summary>
+        <ol>
+          <li>Abra este site no <b>Chrome</b>.</li>
+          <li>Toque nos <b>três pontinhos</b> (⋮) no canto superior direito.</li>
+          <li>Toque em <b>“Instalar aplicativo”</b> ou <b>“Adicionar à tela inicial”</b>.</li>
+          <li>Confirme em <b>Instalar</b>. O ícone aparece na tela inicial.</li>
+        </ol></details>
+    </div>
+    <p class="note">Dados abertos: hospitais e clínicas do CNES (Ministério da Saúde); igrejas do Overture Maps/OpenStreetMap. Telefones e endereços podem estar desatualizados — <b>confirme por telefone</b> e pergunte também na capelania do hospital. Distâncias e tempos são estimativas em linha reta.</p>
   </section>
 </main>
 
-<footer><div class="wrap">✝ Patronato de Enfermos · Rio de Janeiro, Niterói e Baixada Fluminense</div></footer>
-<script src="js/data.js"></script>
+<dialog id="installDlg" aria-label="Como salvar como aplicativo"></dialog>
+<footer><div class="wrap">Patronato de Enfermos · Brasil</div></footer>
+
 <script src="js/app.js"></script>
+<!-- Vercel Web Analytics (sem cookies) -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
