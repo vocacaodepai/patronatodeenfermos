@@ -8,7 +8,7 @@ def norm(s): return re.sub(r"[^a-z0-9 ]", " ", unicodedata.normalize("NFD", str(
 def ascii_(s): return re.sub(r"[^a-z]", "", unicodedata.normalize("NFD", str(s or "")).encode("ascii", "ignore").decode().lower())
 
 TIPO = {"santuario": ("santuario", 5), "basilica": ("basilica", 5), "concatedral": ("catedral", 4), "catedral": ("catedral", 4),
-        "paroquia": ("paroquia", 3), "matriz": ("igreja", 2), "igreja": ("igreja", 2), "capela": ("capela", 1), "comunidade": ("comunidade", 0)}
+        "paroquia": ("paroquia", 3), "p": ("paroquia", 3), "quase": ("paroquia", 3), "matriz": ("igreja", 2), "igreja": ("igreja", 2), "capela": ("capela", 1), "comunidade": ("comunidade", 0)}
 SANTO = {"nossa", "nosso", "sao", "santo", "santa", "santos", "sagrado", "sagrada", "imaculado", "imaculada", "divino", "bom", "menino", "cristo", "senhor", "senhora", "espirito"}
 GEN = {"paroquia", "igreja", "santuario", "basilica", "capela", "matriz", "comunidade", "catedral", "concatedral", "de", "da", "do", "das", "dos",
        "e", "a", "o", "em", "n", "s", "sra", "par", "pessoal", "nossa", "senhora", "nosso", "senhor"}
@@ -21,9 +21,10 @@ def tipo_de(nome):
     if w[0] in SANTO: return ("outro", 2)
     return None, 0        # começa por outra coisa (fraternidade, pastoral, seminário...): nunca une
 
-def nucleo(nome):
+def nucleo(nome, cidade=""):
     n = re.split(r"\s[-–|/]\s|,|\(", nome)[0]
-    return [w for w in norm(n).split() if w not in GEN]
+    cid = {w for w in norm(cidade).split() if len(w) >= 4}                 # o nome da cidade no fim do nome não distingue igrejas
+    return [w for w in norm(n).split() if w not in GEN and w not in cid]
 
 def tem_sufixo(nome): return bool(re.search(r"\s[-–|/]\s|,|\(", nome))
 
@@ -49,7 +50,7 @@ def tel_valido(t): return bool(re.fullmatch(r"\+55\d{10,11}", t or ""))
 def unir(P):
     """Devolve (P_sem_duplicatas, relatorio)."""
     P = P.reset_index(drop=True); n = len(P)
-    tp = [tipo_de(x) for x in P.nome]; nu = [nucleo(x) for x in P.nome]
+    tp = [tipo_de(x) for x in P.nome]; nu = [nucleo(x, c) for x, c in zip(P.nome, P.cidade)]
     grade = collections.defaultdict(list)
     for i in range(n): grade[(int(P.lat.iat[i] / 0.01), int(P.lng.iat[i] / 0.01))].append(i)
     pai = list(range(n))
@@ -91,7 +92,7 @@ def corrigir_tipo_pelo_perfil(P):
         slug = ascii_(f"{P.site.iat[i]} {P.email.iat[i]} {P.social.iat[i] if 'social' in P else ''}")
         novo = "Santuário" if "santuario" in slug else ("Basílica" if "basilica" in slug else None)
         if not novo: continue
-        dist = [w for w in nucleo(nome) if len(w) >= 6 and w not in GENERICOS]
+        dist = [w for w in nucleo(nome, P.cidade.iat[i]) if len(w) >= 6 and w not in GENERICOS]
         if not dist or not any(w in slug for w in dist): continue
         n2 = re.sub(r"^(par[oó]quia|igreja matriz|igreja|matriz|capela)\b", novo, nome, flags=re.I)
         if n2 != nome: P.at[P.index[i], "nome"] = n2; mud.append((nome, n2, P.cidade.iat[i]))
